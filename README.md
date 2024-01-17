@@ -1,6 +1,6 @@
 # journal-app-auth-firebase
 
-journal-app-auth-firebase  del proyecto.
+journal-app-auth-firebase  del proyecto. (Sitio web en Mantenimiento)
 
 ## Índice
 
