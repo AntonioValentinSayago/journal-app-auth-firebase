@@ -1,15 +1,16 @@
 import { AppBar, Grid, IconButton, Toolbar, Typography } from '@mui/material';
 import { LogoutOutlined, MenuOutlined } from '@mui/icons-material';
 
+
 // eslint-disable-next-line react/prop-types
-export const NavBar = ({ drawerWidth }) => {
+export const NavBar = ({ drawerWidth = 240 }) => {
   return (
-    <AppBar
+    <AppBar 
         position='fixed'
         sx={{ 
-        width: { sm: `calc(100% - ${ drawerWidth }px)` },
-        ml: { sm: `${ drawerWidth }px` }
-        }}
+            width: { sm: `calc(100% - ${ drawerWidth }px)` },
+            ml: { sm: `${ drawerWidth }px` }
+         }}
     >
         <Toolbar>
             <IconButton
@@ -19,16 +20,16 @@ export const NavBar = ({ drawerWidth }) => {
             >
                 <MenuOutlined />
             </IconButton>
+
+            <Grid container direction='row' justifyContent='space-between' alignItems='center'>
+                <Typography variant='h6' noWrap component='div'> JournalApp </Typography>
+
+                <IconButton color='error'>
+                    <LogoutOutlined />
+                </IconButton>
+            </Grid>
+
         </Toolbar>
-
-        <Grid container direction='row' justifyContent='space-between' alignItems='center'>
-            <Typography variant='h6' noWrap component='div'> JournalApp </Typography>
-
-            <IconButton color='error'>
-                <LogoutOutlined />
-            </IconButton>
-        </Grid>
-
     </AppBar>
   )
 }
