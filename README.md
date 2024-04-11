@@ -22,6 +22,7 @@ Proporciona instrucciones claras y concisas sobre cómo instalar tu proyecto y o
 
 ```bash
 npm install
+```
 
 ## Create a React Redux App
 
