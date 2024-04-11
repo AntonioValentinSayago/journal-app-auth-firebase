@@ -30,3 +30,10 @@ Proporciona The recommended way to start new apps with React and Redux Toolkit i
 
 ```bash
 npm npx create-next-app --example with-redux my-app
+```
+
+## An Existing App
+Redux Toolkit is available as a package on NPM for use with a module bundler or in a Node application:
+
+```bash
+npm install @reduxjs/toolkit
