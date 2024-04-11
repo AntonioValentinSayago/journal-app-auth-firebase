@@ -11,6 +11,7 @@ Currently, two official plugins are available:
 ## Índice
 
 - [Instalación](#instalación)
+- [Instalación Redux](#Create a React Redux App)
 - [Uso](#uso)
 - [Contribuir](#contribuir)
 - [Licencia](#licencia)
@@ -21,3 +22,10 @@ Proporciona instrucciones claras y concisas sobre cómo instalar tu proyecto y o
 
 ```bash
 npm install
+
+## Create a React Redux App
+
+Proporciona The recommended way to start new apps with React and Redux Toolkit is by using our official 
+
+```bash
+npm npx create-next-app --example with-redux my-app
