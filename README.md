@@ -1,4 +1,4 @@
-# React + Vite Journal App Auth Firebase 1.0.10
+# React + Vite Journal App Auth Firebase 1.0.11
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
