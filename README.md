@@ -1,4 +1,4 @@
-# React + Vite Journal App Auth Firebase 2026
+# React + Vite srvice Now .aval 2026 1.0.0
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
