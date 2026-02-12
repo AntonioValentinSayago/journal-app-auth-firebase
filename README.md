@@ -1,6 +1,6 @@
 # React + Vite Service Now .aval 2026 1.0.0
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación para el Seguimiento de Folios (Service Now).
 
 Currently, two official plugins are available:
 
