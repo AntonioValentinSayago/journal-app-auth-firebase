@@ -10,6 +10,7 @@ Currently, two official plugins are available:
 
 ## Índice
 
+- [Requerimientos](#requerimientos)
 - [Instalación](#instalación)
 - [Instalación Redux](#Create a React Redux App)
 - [Uso](#uso)
