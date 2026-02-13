@@ -1,0 +1,177 @@
+
+---
+
+## docs/architecture.md (propuesto)
+
+```md
+# Architecture
+
+IncidentRadar is a **frontend-only** application built with React + TypeScript.
+It follows a lightweight Clean Architecture approach to keep the codebase:
+- maintainable,
+- testable,
+- and ready to integrate with a **separate Node.js API** in the future.
+
+## Goals
+1. Local-first user experience (fast, offline-friendly)
+2. Business rules centralized and framework-agnostic
+3. Storage abstraction (IndexedDB now, HTTP API later)
+4. UI stays simple and minimal (Trello-like)
+
+## Non-goals (for now)
+- Multi-user support
+- Auth / RBAC
+- Real-time sync
+- Monorepo backend
+- Replicating ServiceNow/Jira features
+
+---
+
+## Layers
+
+### 1) Domain (Business Core)
+**No UI. No storage. No framework assumptions.**
+
+Contains:
+- Models (Folio, LogEntry, Tag, enums)
+- Rules (overdue/stale validations, close validations, blocked/CGR constraints)
+- Repository interfaces (contracts)
+- Selectors (Today lists, board computed states)
+
+**Example responsibilities**
+- Determine if a folio is overdue
+- Enforce: closing requires final diagnosis + final log
+- Enforce: moving to Blocked/CGR requires reason + owner + follow-up date
+- Compute: “stale” if no update in 48h
+
+### 2) Infrastructure (Persistence + Integration)
+Implements domain repository interfaces.
+
+**Today**
+- IndexedDB via Dexie
+
+**Future**
+- API repositories (HTTP) pointing to Node.js backend in a separate repo
+
+Contains:
+- Dexie database configuration
+- Repository implementations (IndexedDbFolioRepository, IndexedDbLogRepository)
+- Mappers (Domain <-> DTO) to prepare for API integration
+- Repository factory (switch local/api mode via env)
+
+### 3) Modules (Feature UI)
+Feature-oriented folders:
+- board (Kanban)
+- folios (detail modal, edit)
+- logs (timeline, quick log)
+- dashboard (Today view)
+- settings (catalog management)
+
+Modules consume:
+- domain services/rules/selectors
+- repositories via the factory
+
+### 4) Shared
+Reusable components and utilities:
+- UI primitives (buttons, modals, chips)
+- hooks (debounced search, keyboard shortcuts)
+- utility helpers (dates, formatting)
+
+---
+
+## Repository Pattern (API-ready)
+
+UI never talks directly to Dexie/IndexedDB.
+
+### Domain contracts (interfaces)
+- `FolioRepository`
+  - getAll, getById, create, update, delete, move
+- `LogRepository`
+  - getByFolioId, addLog
+- `CatalogRepository` (optional)
+  - getCatalogs, updateCatalogs
+
+### Infrastructure implementations
+- `IndexedDbFolioRepository` / `IndexedDbLogRepository` (current)
+- `ApiFolioRepository` / `ApiLogRepository` (future)
+
+### Factory
+A `createRepositories()` function selects repositories based on env config:
+- `STORAGE_MODE=local` -> IndexedDB
+- `STORAGE_MODE=api` -> HTTP API
+
+This enables future API integration with minimal UI changes.
+
+---
+
+## Domain Models vs DTOs
+
+### Domain model
+Used internally by UI and rules. Optimized for product logic.
+
+### DTO
+Used for API requests/responses. Optimized for transport and versioning.
+
+Even before the API exists, we define DTOs and mappers so that later integration doesn’t force a refactor.
+
+---
+
+## State management (Zustand)
+
+Zustand store responsibilities:
+- Hold app state (folios, logs, catalogs, filters)
+- Orchestrate actions (create/move/addLog/update)
+- Call repositories for persistence
+
+Zustand store does NOT own business rules.
+Rules live in `domain/rules` and are called from actions.
+
+---
+
+## Key business rules
+
+1. **Next action required**
+   - A folio without `nextAction` is marked as “At Risk”.
+
+2. **48h stale rule**
+   - If `updatedAt` is older than 48h -> “Stale”.
+
+3. **Overdue follow-up**
+   - If `nextActionDate < today` -> “Overdue”.
+
+4. **Blocked/CGR requires metadata**
+   - Must include: blockedReason, blockedWith, followUpDate.
+
+5. **Close requires final diagnosis**
+   - Must include finalDiagnosis + final log entry.
+
+---
+
+## Local-first persistence + Backup
+- Primary persistence: IndexedDB (Dexie)
+- Backup/restore: Export/Import JSON
+  - Export includes: folios, logs, catalogs, app settings
+
+---
+
+## Future API integration (separate repo)
+When the Node.js API exists:
+- Add `Api*Repository` implementations
+- Set `STORAGE_MODE=api`
+- UI remains unchanged, only the repository source switches
+
+Recommended endpoints (future):
+- GET /folios
+- POST /folios
+- PATCH /folios/:id
+- POST /folios/:id/move
+- GET /folios/:id/logs
+- POST /folios/:id/logs
+- GET/PUT /catalogs
+
+---
+
+## Coding standards
+- TypeScript strict mode
+- Small commits (conventional commits: feat/fix/refactor/docs/chore)
+- Clear naming (English for code, Spanish for labels in UI if desired)
