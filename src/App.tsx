@@ -1,3 +1,6 @@
+import FolioDetailView from "./components/kanban/FolioDetailView";
+import FoliosTableView from "./components/kanban/FoliosTableView";
+import KanbanBoard from "./components/kanban/KanbanBoard";
 import Sidebar from "./components/NavMenu";
 import SearchBox from "./components/ui/SearchBox";
 
@@ -12,11 +15,11 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-800">
+    <div className="min-h-screen bg-slate-200">
       <Sidebar onItemClick={(id) => console.log("clicked:", id)} />
       <main className="md:pl-72 p-4">
-        <div className="rounded-2xl border border-slate-800 bg-slate-800 p-6">
-          <header className="flex w-full items-center justify-between">
+        <div className="rounded-2xl border border-slate-200 bg-slate-200 p-6">
+          <header className="flex w-full items-center justify-between mb-16">
             <SearchBox
               items={STATIC_ITEMS}
               placeholder="Buscar folios, tags, usuarios…"
@@ -29,6 +32,15 @@ export default function App() {
               width={150} 
             />
           </header>
+          <article>
+            <KanbanBoard />
+          </article>
+          <section>
+            <FolioDetailView />
+          </section>
+          <section>
+            <FoliosTableView/>
+          </section>
         </div>
       </main>
     </div>
